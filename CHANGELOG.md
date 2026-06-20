@@ -4,6 +4,11 @@ Semua perubahan penting pada proyek ini dicatat di file ini.
 
 Format mengacu pada [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
+## [Unreleased]
+
+### Fixed
+- Judul tab browser (`<title>`) masih menampilkan template default `"My Google AI Studio App"` setelah di-deploy. Diganti menjadi `"Tes IQ Profesional - 100 Soal Gratis"`, sekaligus ditambahkan `meta description` dan `lang="id"` pada `index.html`.
+
 ## [1.0.0] - 2026-06-20
 
 ### Fixed
