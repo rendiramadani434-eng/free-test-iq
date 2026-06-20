@@ -14,7 +14,7 @@ export default function QuizView({ userName, userAge, questions, onFinish, onExi
   const [currentIndex, setCurrentIndex] = useState(0);
   const [answers, setAnswers] = useState<{ [qId: number]: number }>({});
   const [timeLeft, setTimeLeft] = useState(3600); // 60 minutes = 3600 seconds
-  const [sidebarOpen, setSidebarOpen] = useState(true);
+  const [sidebarOpen, setSidebarOpen] = useState(false);
   const [showSubmitModal, setShowSubmitModal] = useState(false);
 
   const timerRef = useRef<NodeJS.Timeout | null>(null);
@@ -275,6 +275,15 @@ export default function QuizView({ userName, userAge, questions, onFinish, onExi
           </div>
         </section>
 
+        {/* Backdrop overlay: tap anywhere outside to close the navigator on mobile */}
+        {sidebarOpen && (
+          <div
+            onClick={() => setSidebarOpen(false)}
+            className="fixed inset-0 z-20 bg-slate-950/50 backdrop-blur-sm lg:hidden"
+            aria-hidden="true"
+          />
+        )}
+
         {/* Right Sidebar: 100 Navigator grid panel */}
         <section 
           id="navigator-sidebar"
@@ -293,9 +302,11 @@ export default function QuizView({ userName, userAge, questions, onFinish, onExi
               </div>
               <button 
                 onClick={() => setSidebarOpen(false)}
-                className="p-1 lg:hidden text-slate-400 hover:text-slate-600 rounded-md hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
+                className="lg:hidden flex items-center gap-1 px-2.5 py-1.5 text-slate-500 hover:text-slate-700 dark:text-slate-400 dark:hover:text-slate-200 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors text-[10px] font-bold uppercase tracking-wider cursor-pointer"
+                aria-label="Tutup Navigator Soal"
               >
                 <X className="w-4 h-4" />
+                Tutup
               </button>
             </div>
 

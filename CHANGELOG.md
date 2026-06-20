@@ -7,6 +7,12 @@ Format mengacu pada [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ## [Unreleased]
 
 ### Fixed
+- **Navigator Soal menutupi layar penuh di HP tanpa cara menutupnya.** Sebelumnya panel Navigator Soal (grid lompat-ke-nomor) default terbuka (`sidebarOpen = true`), sehingga begitu tes dimulai di layar HP, panel ini langsung menutupi seluruh konten soal tanpa ada centang/tombol yang jelas untuk menutupnya. Diperbaiki dengan tiga cara:
+  1. Panel kini default tertutup (`sidebarOpen = false`) di semua ukuran layar; pengguna membukanya lewat tombol ☰ di header.
+  2. Ditambahkan backdrop gelap di belakang panel saat terbuka di mobile — tap di luar area panel akan menutupnya.
+  3. Tombol close diperjelas dengan label teks "Tutup" di samping ikon X, bukan ikon kecil saja yang mudah terlewat.
+
+### Fixed
 - Judul tab browser (`<title>`) masih menampilkan template default `"My Google AI Studio App"` setelah di-deploy. Diganti menjadi `"Tes IQ Profesional - 100 Soal Gratis"`, sekaligus ditambahkan `meta description` dan `lang="id"` pada `index.html`.
 
 ## [1.0.0] - 2026-06-20
