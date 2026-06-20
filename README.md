@@ -42,3 +42,7 @@ Hasil build statis akan tersedia di folder `dist/`, siap untuk di-deploy ke laya
 - Vite 6
 - Tailwind CSS 4
 - lucide-react (ikon)
+
+## Riwayat Perubahan
+
+Lihat [CHANGELOG.md](./CHANGELOG.md) untuk daftar perubahan tiap versi.
