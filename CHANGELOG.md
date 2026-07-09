@@ -7,6 +7,9 @@ Format mengacu pada [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ## [Unreleased]
 
 ### Fixed
+- **CSS tidak ter-render sama sekali di browser bawaan ColorOS lawas (terkonfirmasi di Oppo A3s, Android 8.1).** Halaman tampil sebagai teks polos tanpa styling apapun, meski konten/form tetap muncul (menandakan JavaScript berjalan normal). Penyebabnya: Tailwind CSS v4 secara default menghasilkan CSS dengan fitur modern seperti *cascade layers* (`@layer`) dan fungsi warna `oklch()`/`color-mix()`. Cascade layers baru didukung browser sejak awal 2022 — pada browser yang tidak mendukungnya, **seluruh isi `@layer` diabaikan total**, bukan cuma bagian yang bermasalah, sehingga semua style Tailwind lenyap. Diperbaiki dengan menambahkan pipeline PostCSS (`postcss.config.js`) yang membongkar `@layer` menjadi CSS biasa dan mengonversi warna modern (`oklch`, `color-mix`) menjadi `rgb()`/hex sebagai nilai utama (versi modern tetap disimpan sebagai progressive enhancement via `@supports`), ditambah `browserslist` dan target build yang lebih konservatif di `vite.config.ts`.
+
+### Fixed
 - **Navigator Soal menutupi layar penuh di HP tanpa cara menutupnya.** Sebelumnya panel Navigator Soal (grid lompat-ke-nomor) default terbuka (`sidebarOpen = true`), sehingga begitu tes dimulai di layar HP, panel ini langsung menutupi seluruh konten soal tanpa ada centang/tombol yang jelas untuk menutupnya. Diperbaiki dengan tiga cara:
   1. Panel kini default tertutup (`sidebarOpen = false`) di semua ukuran layar; pengguna membukanya lewat tombol ☰ di header.
   2. Ditambahkan backdrop gelap di belakang panel saat terbuka di mobile — tap di luar area panel akan menutupnya.

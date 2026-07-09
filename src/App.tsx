@@ -1,10 +1,11 @@
 import { useState, useEffect } from 'react';
 import { questions as rawQuestions } from './questions';
 import { Question, TestResult } from './types';
-import { prepareQuestions, calculateIQ } from './utils';
+import { prepareQuestions, calculateIQ, isResultPaidLocally } from './utils';
 import IntroScreen from './components/IntroScreen';
 import QuizView from './components/QuizView';
 import ResultDashboard from './components/ResultDashboard';
+import PaywallScreen from './components/PaywallScreen';
 import { Brain, Sun, Moon, Info, ShieldCheck, Cpu } from 'lucide-react';
 
 export default function App() {
@@ -14,6 +15,7 @@ export default function App() {
   const [activeQuestions, setActiveQuestions] = useState<Question[]>([]);
   const [currentResult, setCurrentResult] = useState<TestResult | null>(null);
   const [darkMode, setDarkMode] = useState(false);
+  const [isUnlocked, setIsUnlocked] = useState(false);
 
   // Initialize Dark Mode state from localStorage
   useEffect(() => {
@@ -105,8 +107,9 @@ export default function App() {
     historyList.push(newResult);
     localStorage.setItem('iq_test_history', JSON.stringify(historyList));
 
-    // Show result
+    // Show result (behind paywall unless already unlocked)
     setCurrentResult(newResult);
+    setIsUnlocked(isResultPaidLocally(newResult.id));
     setScreen('result');
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
@@ -116,6 +119,7 @@ export default function App() {
     // Bind current details
     setUserName(selectedHistory.name);
     setUserAge(selectedHistory.age);
+    setIsUnlocked(isResultPaidLocally(selectedHistory.id));
     setScreen('result');
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
@@ -123,6 +127,7 @@ export default function App() {
   const handleRetake = () => {
     setScreen('intro');
     setCurrentResult(null);
+    setIsUnlocked(false);
     setActiveQuestions([]);
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
@@ -181,7 +186,16 @@ export default function App() {
           />
         )}
 
-        {screen === 'result' && currentResult && (
+        {screen === 'result' && currentResult && !isUnlocked && (
+          <div className="animate-fade-in">
+            <PaywallScreen
+              result={currentResult}
+              onUnlocked={() => setIsUnlocked(true)}
+            />
+          </div>
+        )}
+
+        {screen === 'result' && currentResult && isUnlocked && (
           <div className="animate-fade-in">
             <ResultDashboard 
               result={currentResult} 

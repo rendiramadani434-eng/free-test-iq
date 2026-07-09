@@ -11,6 +11,12 @@ export default defineConfig(() => {
         '@': path.resolve(__dirname, '.'),
       },
     },
+    build: {
+      // Conservative targets so output works on older OEM Android WebView
+      // browsers (e.g. ColorOS bundled browser), not just the latest Chrome.
+      target: ['es2017', 'chrome87', 'safari13'],
+      cssTarget: ['chrome87', 'safari13'],
+    },
     server: {
       // HMR is disabled in AI Studio via DISABLE_HMR env var.
       // Do not modifyâfile watching is disabled to prevent flickering during agent edits.

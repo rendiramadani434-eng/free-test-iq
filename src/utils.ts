@@ -75,3 +75,39 @@ export function calculateIQ(correctCount: number): { score: number; label: strin
 
   return { score, label };
 }
+
+// ---------- Payment / Paywall helpers ----------
+
+const PAID_RESULTS_KEY = 'iq_test_paid_results';
+
+// Generate a unique, Midtrans-safe order id for a given result
+export function generateOrderId(resultId: string): string {
+  return `IQ-${resultId}-${Math.random().toString(36).slice(2, 8)}`;
+}
+
+// Check (locally) whether a given result id has already been verified as paid.
+// This is just a local cache to avoid asking the user to re-pay for a result
+// they already unlocked in this browser; the actual payment verification
+// itself always happens server-side against Midtrans (see /api/check-status).
+export function isResultPaidLocally(resultId: string): boolean {
+  try {
+    const raw = localStorage.getItem(PAID_RESULTS_KEY);
+    const paidIds: string[] = raw ? JSON.parse(raw) : [];
+    return paidIds.includes(resultId);
+  } catch {
+    return false;
+  }
+}
+
+export function markResultAsPaidLocally(resultId: string): void {
+  try {
+    const raw = localStorage.getItem(PAID_RESULTS_KEY);
+    const paidIds: string[] = raw ? JSON.parse(raw) : [];
+    if (!paidIds.includes(resultId)) {
+      paidIds.push(resultId);
+      localStorage.setItem(PAID_RESULTS_KEY, JSON.stringify(paidIds));
+    }
+  } catch {
+    // ignore storage errors
+  }
+}
